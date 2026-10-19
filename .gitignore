@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+coverage/
+
+# Local environment and database files
+.env
+.env.local
+.env.*.local
+!.env.example
+*.sqlite
+*.sqlite-journal
+
+# Generated Prisma client
+src/generated/
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Test artifacts and screenshots generated locally
+playwright-report/
+test-results/
+docs/screenshots/*.png
+docs/screenshots/*.jpg

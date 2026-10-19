@@ -1,0 +1,26 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f6f8fb;
+  color: #172033;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; }
+
+main {
+  max-width: 760px;
+  margin: 8rem auto;
+  padding: 2.5rem;
+  background: white;
+  border: 1px solid #dbe2ef;
+  border-radius: 1rem;
+  box-shadow: 0 12px 30px rgb(23 32 51 / 8%);
+}
+
+h1 { line-height: 1.15; margin: 0.25rem 0 1rem; }
+
+p { line-height: 1.6; }
+
+.eyebrow { color: #2d5caa; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
