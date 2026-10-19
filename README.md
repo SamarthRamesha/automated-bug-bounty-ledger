@@ -68,6 +68,8 @@ Do not run the remote commands until the repository exists and its exact name is
 - [Requirements traceability](docs/requirements.md)
 - [Architecture](docs/architecture.md)
 - [Database design](docs/database-design.md)
+- [ER diagram](docs/diagrams/er-diagram.md)
+- [Data dictionary](docs/data-dictionary.md)
 - [API contract](docs/api-contract.md)
 - [Team contributions](docs/team-contributions.md)
 - [Implementation plan](docs/implementation-plan.md)

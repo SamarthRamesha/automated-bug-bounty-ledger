@@ -13,7 +13,7 @@
 | `bounty_payouts` | `id` UUID | unique `report_id`; admin issuer and positive amount |
 | `audit_logs` | `id` UUID | action metadata without secrets |
 
-The full ER diagram, data dictionary, and runnable migration will be delivered in Milestone 2, after the schema is tested against local PostgreSQL.
+The ER diagram is available in [`diagrams/er-diagram.md`](diagrams/er-diagram.md), the field-level summary in [`data-dictionary.md`](data-dictionary.md), and the runnable Prisma migration in `prisma/migrations/202610190001_initial_schema/migration.sql`. They are schema-validated but remain untested against a live PostgreSQL service until it is installed locally.
 
 ## MongoDB collection
 
