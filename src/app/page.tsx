@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function HomePage() {
   return (
     <main>
@@ -6,7 +7,7 @@ export default function HomePage() {
       <p>
         Foundation established. Authentication, report workflows, evidence, remediation,
         payouts, and reporting will be delivered in the documented milestones.
-      </p>
+      </p><Link href="/login">Open the ledger</Link>
     </main>
   );
 }
