@@ -1,13 +1,16 @@
-# Team responsibilities and handoff rule
+# Team contributions
 
-## Samarth Ramesha - complete first
+Samarth Ramesha implemented repository/design foundations, PostgreSQL schema and
+initial migrations, seed/authentication, researcher/admin access, report APIs,
+lifecycle checks and history, initial UI/tests, and the handoff README. His recorded
+handoff is represented by commits including `f9e50c4` and `b8503eb`.
 
-Samarth owns repository setup, architecture/design documentation, PostgreSQL migrations and seeds, shared types and contracts, authentication, authorization, report workflows, core API/UI, constraints, initial advanced features, tests, README, and the handoff guide.
+Rahul B (`PES2UG24CS393`, `rahulbiju512@gmail.com`) completed explicit patch review,
+transactional approval, closed-report payout eligibility and ledger, MongoDB evidence
+and aggregation, audit coverage, corrected dashboard views, integrated UI, and final
+verification/documentation in five completion commits. Both database and application
+work are represented. These commits stay on the existing branch per Rahul's request.
 
-His handoff is ready only when a fresh local PostgreSQL database can run the documented core workflow and its tests, without Rahul changing Samarth's modules.
-
-## Rahul B - begin after handoff
-
-Rahul clones the completed repository, creates his own branch, and implements MongoDB evidence, remediation completion, payout ledger, reporting dashboard/views, module tests, screenshots, and final integration documentation.
-
-Both members must make real, reviewable commits. Do not fabricate Git authorship, timestamps, or contribution history.
+The local repository identity uses `git config --local`; the origin uses the
+`github-second` SSH alias. No authorship, timestamps, or contribution history are
+fabricated. Git commits do not transfer the local databases or private environment.

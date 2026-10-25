@@ -1,7 +1,7 @@
 -- Search reports using PostgreSQL full-text search.
 SELECT id, title, severity, status
 FROM vulnerability_reports
-WHERE to_tsvector('english', title || ' ' || description) @@ plainto_tsquery('english', :search_term)
+WHERE to_tsvector('english', title || ' ' || description) @@ plainto_tsquery('english', :'search_term')
 ORDER BY created_at DESC;
 
 -- Aggregate reports by severity; HAVING excludes insignificant groups.
@@ -21,3 +21,13 @@ ORDER BY r.created_at DESC;
 
 -- Administrator dashboard view.
 SELECT * FROM v_report_dashboard ORDER BY status, severity;
+
+-- Payout ledger joins report, recording admin, and recipient.
+SELECT * FROM v_payout_ledger ORDER BY recorded_at DESC;
+
+-- Audit events for a report UUID supplied with psql -v report_id=... .
+SELECT a.action, u.display_name AS actor, a.created_at, a.metadata
+FROM audit_logs a LEFT JOIN users u ON u.id = a.actor_id
+WHERE (a.entity_type = 'VULNERABILITY_REPORT' AND a.entity_id = :'report_id'::uuid)
+   OR a.metadata->>'reportId' = :'report_id'
+ORDER BY a.created_at;

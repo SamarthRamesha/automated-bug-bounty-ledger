@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, type FormEvent } from "react";
@@ -42,7 +41,7 @@ export default function ReportForm({ onSubmitted }: ReportFormProps) {
         setError(
           result?.error?.message ??
             result?.message ??
-            "Could not submit the report. Please check the fields."
+            "Could not submit the report. Please check the fields.",
         );
         return;
       }

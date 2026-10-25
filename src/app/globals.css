@@ -5,9 +5,13 @@
   color: #172033;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-body { margin: 0; }
+body {
+  margin: 0;
+}
 
 main {
   max-width: 760px;
@@ -19,36 +23,159 @@ main {
   box-shadow: 0 12px 30px rgb(23 32 51 / 8%);
 }
 
-h1 { line-height: 1.15; margin: 0.25rem 0 1rem; }
+h1 {
+  line-height: 1.15;
+  margin: 0.25rem 0 1rem;
+}
 
-p { line-height: 1.6; }
+p {
+  line-height: 1.6;
+}
 
-.eyebrow { color: #2d5caa; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.eyebrow {
+  color: #2d5caa;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
 
-main { max-width: 1120px; margin: 3rem auto; }
-section { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid #dbe2ef; }
-h2 { font-size: 1.25rem; }
-h3 { font-size: 1rem; overflow-wrap: anywhere; }
-a { color: #24549a; }
-form { margin: 1rem 0; }
-label { display: block; font-size: .9rem; font-weight: 600; margin-bottom: 1rem; }
-input, textarea, select { display: block; width: 100%; font: inherit; padding: .65rem; margin-top: .4rem; border: 1px solid #9eacc2; border-radius: .35rem; background: white; color: inherit; }
-textarea { min-height: 90px; resize: vertical; }
-button { font: inherit; padding: .6rem .9rem; border: 1px solid #24549a; border-radius: .35rem; background: #24549a; color: white; cursor: pointer; }
-button:disabled { opacity: .55; cursor: wait; }
-fieldset { border: 0; padding: 0; min-width: 0; }
-.filters { display: flex; align-items: end; gap: 1rem; flex-wrap: wrap; }
-.filters label { flex: 1; margin: 0; min-width: 160px; }
-.actions { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1rem 0; }
-.table-scroll { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
-th, td { text-align: left; padding: .8rem .6rem; border-bottom: 1px solid #dbe2ef; vertical-align: top; }
-th { background: #f6f8fb; }
-td code { display: block; max-width: 400px; overflow-wrap: anywhere; }
-article { background: #f6f8fb; border: 1px solid #dbe2ef; padding: 1rem; border-radius: .5rem; margin: 1rem 0; }
-summary { cursor: pointer; font-weight: 600; }
-.prewrap { white-space: pre-wrap; overflow-wrap: anywhere; }
-pre { overflow-x: auto; }
-.error, [role="alert"] { color: #a52020; }
-.success { color: #136b3e; }
-@media (max-width: 700px) { main { margin: 1rem; padding: 1rem; } .filters { display: block; } .filters label { margin-bottom: 1rem; } }
+main {
+  max-width: 1120px;
+  margin: 3rem auto;
+}
+section {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #dbe2ef;
+}
+h2 {
+  font-size: 1.25rem;
+}
+h3 {
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+a {
+  color: #24549a;
+}
+form {
+  margin: 1rem 0;
+}
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+input,
+textarea,
+select {
+  display: block;
+  width: 100%;
+  font: inherit;
+  padding: 0.65rem;
+  margin-top: 0.4rem;
+  border: 1px solid #9eacc2;
+  border-radius: 0.35rem;
+  background: white;
+  color: inherit;
+}
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+button {
+  font: inherit;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #24549a;
+  border-radius: 0.35rem;
+  background: #24549a;
+  color: white;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.filters {
+  display: flex;
+  align-items: end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.filters label {
+  flex: 1;
+  margin: 0;
+  min-width: 160px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 1rem 0;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+th,
+td {
+  text-align: left;
+  padding: 0.8rem 0.6rem;
+  border-bottom: 1px solid #dbe2ef;
+  vertical-align: top;
+}
+th {
+  background: #f6f8fb;
+}
+td code {
+  display: block;
+  max-width: 400px;
+  overflow-wrap: anywhere;
+}
+article {
+  background: #f6f8fb;
+  border: 1px solid #dbe2ef;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.prewrap {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+pre {
+  overflow-x: auto;
+}
+.error,
+[role="alert"] {
+  color: #a52020;
+}
+.success {
+  color: #136b3e;
+}
+@media (max-width: 700px) {
+  main {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  .filters {
+    display: block;
+  }
+  .filters label {
+    margin-bottom: 1rem;
+  }
+}

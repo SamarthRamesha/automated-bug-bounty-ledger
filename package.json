@@ -15,7 +15,9 @@
     "test:watch": "vitest",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "test:e2e": "playwright test",
+    "demo:seed": "tsx prisma/seed.ts --demo"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.0",
+    "@playwright/test": "1.61.1",
     "@types/node": "^24.0.0",
     "@types/pg": "^8.0.0",
     "@types/react": "^19.0.0",

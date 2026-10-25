@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { getSession, isAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -117,8 +116,19 @@ export async function PATCH(
     }
 
     if (nextStatus === "PATCHED" || nextStatus === "CLOSED") {
-      const approved = await prisma.patch.count({ where: { reportId: parsedId.data, reviewStatus: "APPROVED" } });
-      if (!approved) return NextResponse.json({ error: { code: "PATCH_REQUIRED", message: "An approved patch is required." } }, { status: 409 });
+      const approved = await prisma.patch.count({
+        where: { reportId: parsedId.data, reviewStatus: "APPROVED" },
+      });
+      if (!approved)
+        return NextResponse.json(
+          {
+            error: {
+              code: "PATCH_REQUIRED",
+              message: "An approved patch is required.",
+            },
+          },
+          { status: 409 },
+        );
     }
 
     // Atomic compare-and-swap: update only if the status

@@ -41,7 +41,7 @@ All routes return JSON `{ "data": ... }` on success and `{ "error": { "code": st
 
 ## Contract rules
 
-- UUIDs are strings at the API boundary.
+- UUIDs are strings at the API boundary and are normalized to lowercase, including evidence retry keys.
 - Route Handlers validate input and authorization before database calls.
 - Rahul may add optional response fields but must not rename or weaken the documented requests without recording a migration note here.
 

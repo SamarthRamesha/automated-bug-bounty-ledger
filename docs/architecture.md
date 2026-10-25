@@ -1,34 +1,42 @@
 # System architecture
 
-## Purpose
+The Next.js interface lets a researcher submit sanitized findings and evidence while
+an admin reviews findings, validates remediation, and records a bounty payment.
 
-The application lets a security researcher submit a sanitized vulnerability report. An administrator reviews it, changes status through allowed transitions, records remediation, and records one approved bounty award without sending real money.
-
-## Components
-
-```text
-Browser UI (Next.js)
-        |
-Route Handlers + server-side validation + authorization
-        |                         |
-PostgreSQL (authoritative)     MongoDB (sanitized evidence)
+```mermaid
+flowchart TD
+  UI[Next.js researcher/admin interface] --> API[Route Handlers: session, authorization, validation]
+  API --> SQL[PostgreSQL: identity, ownership, lifecycle, patch review, payouts, audit]
+  API --> Mongo[MongoDB: flexible sanitized evidence]
+  SQL --> Views[Dashboard and payout ledger views]
+  Mongo --> Aggregate[Component aggregation]
 ```
 
-## Database boundary
+PostgreSQL is authoritative for permissions and report existence. MongoDB contains
+only evidence referenced by report UUID. Every evidence request verifies SQL access
+before touching MongoDB. Aggregation is admin-only and filters SQL-owned report IDs.
 
-PostgreSQL owns users, roles, reports, report ownership, lifecycle history, patches, payouts, and audit records. MongoDB owns only flexible evidence documents identified by `reportId`; it is not an authority for identity, permissions, report existence, or payout status.
+Report submission creates history and audit through SQL triggers. Status updates
+compare the previous status atomically. Patch/review/payout APIs lock the report in a
+transaction; approval and PATCHED status are committed together. SQL triggers also
+check lifecycle, approval, and payout eligibility for direct writes. Trigger-generated
+audit records roll back with the operation, so there are no duplicate application
+logs for those actions. API errors omit database internals and secrets.
 
-No distributed transaction is claimed. Evidence creation first validates the user and report in PostgreSQL, then writes MongoDB. If MongoDB fails, the API reports failure and records an application audit/retry item when that module is implemented. Payouts do not require MongoDB and use a PostgreSQL transaction.
-
-## Authorization matrix
+Evidence uses a SQL audit intent, a MongoDB upsert keyed by a stable UUID, and a SQL
+completion/failure event. Replays verify actor/report/payload hash. Failure before
+MongoDB insertion returns a retryable 503; failure to append completion after a saved
+document returns `auditPending`. Replaying reconciles completion. This is an explicit
+cross-database recovery protocol, not a distributed transaction. No automatic
+background reconciler is included; clients retain retry keys until completion.
 
 | Action | Researcher | Admin |
-|---|---:|---:|
-| Create report | Own only | Yes |
-| View report | Own only | All |
-| Change status | No | Yes |
-| Add/view evidence | Own report only | All |
-| Record patch | No | Yes |
-| Record payout | No | Yes |
+|---|---|---|
+| Create report | Own | Own |
+| Read report/evidence/patch/history/payout | Own reports | All |
+| Submit evidence | Own reports | All |
+| Change status, submit/review patch, record payout | Denied | Allowed by lifecycle |
+| Read audit/component aggregation | Denied | All |
 
-Visibility in the UI is only convenience. Every protected Route Handler performs the same authorization check server-side.
+UI visibility is convenience; Route Handlers and server-rendered detail pages enforce
+scope independently. Payments are ledger entries for externally completed transfers.

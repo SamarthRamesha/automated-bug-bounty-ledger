@@ -1,25 +1,19 @@
-# Implementation plan and current evidence
+# Completion implementation and evidence
 
-## Milestone 1 status
+The completion work is split into five commits on the existing branch, as requested:
 
-Created: project metadata, environment template, ignore rules, Next.js application shell, architecture, database design draft, API contract, requirements traceability, and team division.
+1. Database: patch review fields, eligibility guards, audit triggers, corrected views,
+   preserved legacy records, updated schema relationships.
+2. APIs: authorized detail, patch submission/review, exact-decimal payouts, scoped
+   ledger, audit retrieval, report filtering, and transaction boundaries.
+3. MongoDB: flexible evidence validation/indexes, permission checks, retry-safe upsert,
+   audit intent/completion/failure events, and component aggregation.
+4. UI: integrated researcher/admin report details, review controls, history, payout
+   recording/ledger, search/filtering, summaries, and meaningful request states.
+5. Verification/handoff: unit/API/SQL/MongoDB/browser tests, real screenshots, repeatable
+   demo fixtures, final requirements/documentation, and integration fixes.
 
-Not yet created: Git repository, installed dependencies, lock file, Prisma schema, migrations, database connections, authentication, APIs, tests, MongoDB module, or final screenshots.
-
-## Planned next milestones
-
-1. Database foundation: tested PostgreSQL schema, migrations, seed data, ER diagram, data dictionary.
-2. Core application: Samarth's auth, authorization, report APIs and UI.
-3. Advanced database verification: trigger, search/indexes, and tests.
-4. Handoff: freeze and document the working Samarth scope.
-5. Rahul extension: evidence, patches, payouts, reporting, integrations tests.
-6. Final integration: traceability review, actual screenshots, demo guide.
-
-## Risks and mitigations
-
-| Risk | Mitigation |
-|---|---|
-| Native services missing | Verify PostgreSQL/MongoDB before database implementation; document installation only if required |
-| Current host uses Node 25 | Use Node 24 LTS per `.nvmrc` before dependency install |
-| Cross-database partial failure | PostgreSQL remains source of truth; explicit evidence failure/retry handling |
-| Scope creep | No payment gateway, payload execution, microservices, or AI features |
+Existing lifecycle values and request bodies remain compatible. Patch review is an
+additive step; new payouts require CLOSED plus an approved patch. No payment gateway,
+vector database, cross-database transaction claim, or fabricated historical audit is
+included. See testing.md for actual results and demo-guide.md for the presentation.
