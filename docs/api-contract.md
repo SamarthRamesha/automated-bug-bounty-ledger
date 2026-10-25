@@ -58,3 +58,17 @@ All routes return JSON `{ "data": ... }` on success and `{ "error": { "code": st
 New APIs return 400 for invalid input, 401/403 for missing/insufficient privileges,
 404 for missing or inaccessible reports, and 409 for conflicting workflow actions.
 Existing requests are preserved; patch review is an additive workflow requirement.
+
+### Evidence reliability
+
+Evidence POST accepts an optional UUID `Idempotency-Key` header. Clients should
+retain it until the request succeeds and reuse it on retries. Reusing a key for a
+different actor, report, or payload returns 409. Technical metadata values are
+bounded strings; components are deduplicated. PostgreSQL records an intent before
+MongoDB upsert and a completion/failure event afterwards. If completion logging
+fails, evidence still returns successfully with `auditPending: true`; replaying the
+same request reconciles the completion event. There is no distributed transaction.
+MongoDB failures return 503 and do not affect other SQL workflows.
+
+`GET /api/reporting/components` is admin-only and returns component evidence counts
+using a MongoDB aggregation restricted to report IDs that still exist in SQL.
