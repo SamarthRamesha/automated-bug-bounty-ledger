@@ -1,12 +1,12 @@
 # API contract
 
-All routes return JSON `{ "data": ... }` on success and `{ "error": { "code": string, "message": string } }` on failure. Field names and status names below are the compatibility contract for Rahul's phase.
+All routes return JSON `{ "data": ... }` on success and `{ "error": { "code": string, "message": string } }` on failure. This reference describes the implemented authentication, report, evidence, patch-review, payout, and reporting endpoints.
 
 ## Report lifecycle
 
 `SUBMITTED -> UNDER_REVIEW -> ACCEPTED -> REMEDIATING -> PATCHED -> CLOSED`; an admin may transition `SUBMITTED` or `UNDER_REVIEW` to `REJECTED`. Invalid transitions receive `409 CONFLICT`.
 
-## Samarth-owned routes
+## Authentication and report routes
 
 - `POST /api/auth/login`, `POST /api/auth/logout`
 - `POST /api/reports`
@@ -14,7 +14,39 @@ All routes return JSON `{ "data": ... }` on success and `{ "error": { "code": st
 - `GET /api/reports/:reportId`
 - `PATCH /api/reports/:reportId/status`
 
-## Rahul-owned extension routes
+### Authentication
+
+`POST /api/auth/login` accepts `{ "email": "researcher.demo@ledger.local", "password": "your_private_demo_password" }`.
+Email is trimmed and lowercased. A successful login returns the account email and
+roles and sets the signed, HTTP-only `bb_session` cookie for eight hours.
+`POST /api/auth/logout` clears it and returns `{ "data": { "loggedOut": true } }`.
+Protected requests must include the session cookie; role checks run on the server.
+
+### Report submission and status
+
+`POST /api/reports` accepts:
+
+```json
+{
+  "title": "Search input validation discrepancy",
+  "description": "A sanitized local finding requiring validation and regression testing.",
+  "affectedAsset": "demo.local/search",
+  "severity": "HIGH"
+}
+```
+
+The title must contain 8–200 characters, description 20–10,000, and affected asset
+1–255 after trimming. Severity is LOW, MEDIUM, HIGH, or CRITICAL. Unexpected fields
+are rejected; the reporter is assigned from the session. Successful creation returns
+201 with the report in `data`.
+
+`PATCH /api/reports/:reportId/status` accepts `{ "status": "UNDER_REVIEW" }` (or another
+allowed next status). It is admin-only and rejects invalid transitions or stale
+conditional updates with 409. `GET /api/reports` supports status/severity filters and
+case-insensitive title/asset search with `q` limited to 200 characters. Researchers'
+queries remain scoped to their own reports.
+
+## Evidence, patch, and payout routes
 
 ### Evidence
 
@@ -43,7 +75,7 @@ All routes return JSON `{ "data": ... }` on success and `{ "error": { "code": st
 
 - UUIDs are strings at the API boundary and are normalized to lowercase, including evidence retry keys.
 - Route Handlers validate input and authorization before database calls.
-- Rahul may add optional response fields but must not rename or weaken the documented requests without recording a migration note here.
+- Preserve documented field names and request bodies; record any compatibility changes in this contract.
 
 ## Completed workflow additions
 

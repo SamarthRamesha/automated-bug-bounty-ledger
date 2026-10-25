@@ -5,9 +5,42 @@ submit vulnerability reports and sanitized evidence. Administrators review repor
 review remediation patches, close findings, and record one bounty payment per report.
 The ledger records externally completed payments; it does not transfer money.
 
-Samarth implemented the relational foundation, authentication, report APIs, lifecycle,
-and initial UI/tests. Rahul completed patch review, payouts, MongoDB evidence,
-audit coverage, reporting, and final integration in five commits.
+[Setup](#setup) · [Lifecycle](#lifecycle-and-integrity) · [API reference](#application-and-apis) · [Verification](#verification-and-demo) · [Demo guide](docs/demo-guide.md)
+
+## Features
+
+| Capability | Researcher | Administrator |
+|---|---|---|
+| Vulnerability reports | Submit and view own reports | View all reports and manage lifecycle |
+| Sanitized evidence | Add and view evidence for own reports | Add and view evidence for all reports |
+| Patch management | View remediation and review results | Submit, approve, or reject patches |
+| Bounty ledger | View payouts for own reports | Record eligible payouts and view all payments |
+| Reporting and audit | View own report status history | View dashboard summaries, component aggregation, and audit trails |
+
+## Technology and architecture
+
+| Layer | Technology | Responsibility |
+|---|---|---|
+| Web application | Next.js App Router, React, TypeScript | Researcher and administrator dashboards |
+| Backend | Next.js Route Handlers, Zod | Authentication, authorization, request validation |
+| Relational database | PostgreSQL, Prisma | Ownership, lifecycle, patches, payouts, history, audit |
+| Document database | MongoDB | Flexible reproduction evidence and component aggregation |
+| Verification | Vitest, Playwright | Unit, API, database integration, and browser tests |
+
+See the [system architecture](docs/architecture.md) and
+[database design](docs/database-design.md) for database boundaries and transaction behavior.
+
+## Application preview
+
+<details>
+<summary>View the administrator dashboard</summary>
+
+![Administrator dashboard showing reports, lifecycle summaries, payout ledger, and evidence aggregation](docs/screenshots/admin-dashboard.png)
+
+</details>
+
+[Browse all screenshots](docs/screenshots/README.md), including the researcher dashboard
+and a completed report with reviewed patches, payout, history, and audit records.
 
 ## Setup
 
@@ -22,6 +55,14 @@ Configure `.env` for your databases. Set a private `SESSION_SECRET` of at least 
 characters and `SEED_DEMO_PASSWORD` of at least 12 characters. The environment file
 is ignored by Git. `DATABASE_URL`, `MONGODB_URI`, and `MONGODB_DB_NAME` configure
 application storage; `.env.example` documents every variable.
+
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` | Application PostgreSQL connection |
+| `MONGODB_URI`, `MONGODB_DB_NAME` | Evidence database connection and name |
+| `SESSION_SECRET` | JWT session signing secret |
+| `SEED_DEMO_PASSWORD` | Private password used when seeding demo accounts |
+| `TEST_DATABASE_URL`, `TEST_MONGODB_URI` | Optional dedicated integration-test services |
 
 Create the PostgreSQL database named in `DATABASE_URL`, then run:
 
@@ -119,6 +160,11 @@ An evidence outage leaves report, patch, and payout functions available.
 
 ## Verification and demo
 
+**Last verified: 2026-10-25.** All **59 tests across 7 files** and **2 browser scenarios**
+passed with PostgreSQL and MongoDB enabled. Lint, production build, Prisma validation,
+and fresh/legacy migration checks also passed. Detailed evidence and limitations are
+recorded in [testing results](docs/testing.md).
+
 ```bash
 npm test
 npm run lint
@@ -138,6 +184,15 @@ server on port 3000 and save real screenshots.
 See [testing evidence](docs/testing.md), [demo steps](docs/demo-guide.md),
 [requirements traceability](docs/requirements.md), and [screenshots](docs/screenshots/README.md).
 
+## Production build
+
+With the application databases running and `.env` configured:
+
+```bash
+npm run build
+npm start
+```
+
 ## Database documentation
 
 - [Architecture](docs/architecture.md), [database design](docs/database-design.md),
@@ -147,6 +202,17 @@ See [testing evidence](docs/testing.md), [demo steps](docs/demo-guide.md),
 - [Safe DDL/DML demonstration](database/queries/ddl-demonstration.sql): CREATE, ALTER,
   DROP, INSERT, UPDATE, DELETE, SELECT using a temporary table
 - [Contributions](docs/team-contributions.md) and [implementation evidence](docs/implementation-plan.md)
+
+## Contributors
+
+Samarth implemented the relational foundation, authentication, report APIs, lifecycle,
+and initial UI/tests. Rahul completed patch review, payouts, MongoDB evidence,
+audit coverage, reporting, and final integration in five commits.
+
+See [team contributions](docs/team-contributions.md) and the
+[completion record](docs/implementation-plan.md) for responsibilities and commit history.
+
+## Repository notes
 
 Commit Prisma schema and forward migrations together. Configure Git identity locally
 and retain the `github-second` remote for this checkout. Credentials and demo database
