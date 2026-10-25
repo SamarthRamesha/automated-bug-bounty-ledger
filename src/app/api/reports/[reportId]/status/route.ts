@@ -116,6 +116,11 @@ export async function PATCH(
       );
     }
 
+    if (nextStatus === "PATCHED" || nextStatus === "CLOSED") {
+      const approved = await prisma.patch.count({ where: { reportId: parsedId.data, reviewStatus: "APPROVED" } });
+      if (!approved) return NextResponse.json({ error: { code: "PATCH_REQUIRED", message: "An approved patch is required." } }, { status: 409 });
+    }
+
     // Atomic compare-and-swap: update only if the status
     // is still the one we validated above.
     const result = await prisma.vulnerabilityReport.updateMany({

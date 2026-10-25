@@ -44,3 +44,20 @@ export function canTransitionStatus(
 ): boolean {
   return (statusTransitions[current] as readonly string[]).includes(next);
 }
+
+export const patchSchema = z.object({
+  summary: z.string().trim().min(10).max(10000),
+  reference: z.string().trim().min(1).max(255),
+  patchedAt: z.iso.datetime({ offset: true }).refine(value => Date.parse(value) <= Date.now(), "Patch date cannot be in the future."),
+}).strict();
+export const patchReviewSchema = z.object({
+  decision: z.enum(["APPROVED", "REJECTED"]),
+  note: z.string().trim().max(500).optional(),
+}).strict().refine(value => value.decision !== "REJECTED" || !!value.note, { message: "A rejection note is required.", path: ["note"] });
+// Convert JSON numbers to their decimal spelling, then validate before Prisma Decimal.
+export const payoutSchema = z.object({
+  amount: z.union([z.string(), z.number()]).transform(String)
+    .refine(value => /^(?:0|[1-9]\d{0,9})(?:\.\d{1,2})?$/.test(value) && /[1-9]/.test(value), "Use a positive amount with at most two decimal places and ten integer digits."),
+  currency: z.enum(["INR", "USD"]),
+  reference: z.string().trim().min(1).max(100),
+}).strict();

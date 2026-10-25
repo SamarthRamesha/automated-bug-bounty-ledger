@@ -44,3 +44,17 @@ All routes return JSON `{ "data": ... }` on success and `{ "error": { "code": st
 - UUIDs are strings at the API boundary.
 - Route Handlers validate input and authorization before database calls.
 - Rahul may add optional response fields but must not rename or weaken the documented requests without recording a migration note here.
+
+## Completed workflow additions
+
+- `GET /api/reports/:reportId`: owner/admin report details, patches, payout, and status history.
+- `POST /api/reports/:reportId/patches`: existing request retained; admin submission during REMEDIATING creates PENDING review. `patchedAt` cannot be in the future.
+- `PATCH /api/reports/:reportId/patches/:patchId/review`: admin `{decision: "APPROVED" | "REJECTED", note?: string}`. Rejection requires a note. Approval and PATCHED status are atomic; reviews are final.
+- `POST /api/reports/:reportId/payouts`: CLOSED plus approved patch required. Amount accepts a decimal string (preferred) or JSON number, at most two decimal places and ten integer digits; response amounts are strings. Recipient is derived from report ownership. INR/USD only. No money is transferred.
+- `GET /api/payouts`: owner-scoped history, all records for admins.
+- `GET /api/reports/:reportId/audit`: admin-only audit events, including linked patch/payout/evidence events.
+- Report listing implements `q`, `status`, and `severity`. Search matches title and affected asset; the indexed full-text query remains available in the SQL demonstrations.
+
+New APIs return 400 for invalid input, 401/403 for missing/insufficient privileges,
+404 for missing or inaccessible reports, and 409 for conflicting workflow actions.
+Existing requests are preserved; patch review is an additive workflow requirement.
