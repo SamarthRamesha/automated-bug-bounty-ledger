@@ -31,3 +31,12 @@ Planned indexes: `{ reportId: 1, createdAt: -1 }` for report evidence retrieval 
 | Payout transaction | Rahul | Payout row plus audit row succeed or fail together |
 | Reporting view | Rahul | Dashboard summary without duplicating query logic |
 | MongoDB aggregation | Rahul | Evidence grouped by component |
+
+## Completion migration
+
+The forward migration adds explicit patch review, approved-patch lifecycle guards,
+closed-report payout eligibility, immutable payout/audit records, and transactional
+audit triggers. API transactions lock the parent report before child writes; SQL
+patch/payout guards also lock that report. Existing status compare-and-swap remains.
+The dashboard view counts each report once, and the payout ledger joins the report
+owner as recipient. PostgreSQL remains the authority for all workflow decisions.

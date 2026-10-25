@@ -15,3 +15,14 @@ erDiagram
 ```
 
 MongoDB's `report_evidence` collection is intentionally not shown as a relational entity. It references the PostgreSQL report UUID but has no cross-database foreign key.
+
+Patch actor relationships added by the completion migration:
+
+```mermaid
+erDiagram
+  USERS o|--o{ PATCHES : submits
+  USERS o|--o{ PATCHES : reviews
+```
+
+Both actor keys reference `users.id`. Submission attribution is nullable only for
+legacy patches; reviewed patches require a reviewer and review timestamp.

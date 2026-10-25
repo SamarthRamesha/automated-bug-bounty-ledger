@@ -14,3 +14,18 @@
 ## MongoDB evidence document
 
 `report_evidence` has `_id`, `reportId`, `submittedByUserId`, `reproduction`, `affectedComponents`, `technicalMetadata`, `sanitizedPocNotes`, `createdAt`, and `updatedAt`. It stores safe, flexible evidence only; it never stores credentials or executable exploit payloads.
+
+## Reviewed patches and payout eligibility
+
+Patches now carry `review_status` (PENDING/APPROVED/REJECTED), nullable legacy
+`submitted_by_id`, `reviewed_by_id`, `reviewed_at`, and `review_note`. New submissions
+require an actor and remediation status; rejected reviews require a note. Reviewed
+patches are retained and immutable. Approval permits PATCHED, followed by CLOSED.
+Payouts are immutable records for CLOSED reports with an approved patch; INR/USD
+are supported. The recipient is always the report's researcher. Existing patches
+migrate to PENDING; existing payouts remain untouched. Legacy completed reports
+without approved patches are historical records, not newly payout-eligible.
+
+Report, patch, and payout triggers append audit events in the same SQL transaction.
+Audit rows reject UPDATE/DELETE. Database owners can bypass triggers, so these
+controls demonstrate application integrity rather than tamper-proof storage.
