@@ -5,7 +5,7 @@ submit vulnerability reports and sanitized evidence. Administrators review repor
 review remediation patches, close findings, and record one bounty payment per report.
 The ledger records externally completed payments; it does not transfer money.
 
-[Setup](#setup) · [Lifecycle](#lifecycle-and-integrity) · [API reference](#application-and-apis) · [Verification](#verification-and-demo) · [Demo guide](docs/demo-guide.md)
+[Setup](#setup) · [Lifecycle](#lifecycle-and-integrity) · [API reference](#application-and-apis) · [Verification](#verification-and-demo) · [Demo guide](docs/demo-guide.md) · [Viva guide](docs/viva-guide.md) · [Project report](docs/project-report.md)
 
 ## Features
 
@@ -195,6 +195,7 @@ npm start
 
 ## Database documentation
 
+- [Project Report (Soft copy)](docs/project-report.md) and [Viva & Demonstration Guide](docs/viva-guide.md)
 - [Architecture](docs/architecture.md), [database design](docs/database-design.md),
   [ER diagram](docs/diagrams/er-diagram.md), and [data dictionary](docs/data-dictionary.md)
 - [Important SQL queries](database/queries/important-queries.sql): full-text search,
