@@ -26,3 +26,6 @@ playwright-report/
 test-results/
 docs/screenshots/*.png
 docs/screenshots/*.jpg
+
+# TypeScript incremental cache
+*.tsbuildinfo

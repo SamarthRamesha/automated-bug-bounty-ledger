@@ -201,3 +201,35 @@ describe("Reports API authorization and validation", () => {
     expect(prisma.vulnerabilityReport.updateMany).not.toHaveBeenCalled();
   });
 });
+
+it("combines validated status, severity and search with researcher ownership", async () => {
+  vi.mocked(getSession).mockResolvedValue(researcher);
+  vi.mocked(prisma.vulnerabilityReport.findMany).mockResolvedValue([]);
+  const response = await GET(
+    new Request(
+      "http://localhost/api/reports?q=search&status=CLOSED&severity=HIGH",
+    ),
+  );
+  expect(response.status).toBe(200);
+  expect(prisma.vulnerabilityReport.findMany).toHaveBeenCalledWith(
+    expect.objectContaining({
+      where: {
+        reporterId: researcher.userId,
+        status: "CLOSED",
+        severity: "HIGH",
+        OR: [
+          { title: { contains: "search", mode: "insensitive" } },
+          { affectedAsset: { contains: "search", mode: "insensitive" } },
+        ],
+      },
+    }),
+  );
+});
+it("rejects unsupported report filters before querying", async () => {
+  vi.mocked(getSession).mockResolvedValue(admin);
+  expect(
+    (await GET(new Request("http://localhost/api/reports?status=INVALID")))
+      .status,
+  ).toBe(400);
+  expect(prisma.vulnerabilityReport.findMany).not.toHaveBeenCalled();
+});

@@ -1,13 +1,14 @@
-
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 type ReportFormProps = {
   onSubmitted?: () => void;
 };
 
 export default function ReportForm({ onSubmitted }: ReportFormProps) {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [severity, setSeverity] = useState("MEDIUM");
@@ -40,7 +41,7 @@ export default function ReportForm({ onSubmitted }: ReportFormProps) {
         setError(
           result?.error?.message ??
             result?.message ??
-            "Could not submit the report. Please check the fields."
+            "Could not submit the report. Please check the fields.",
         );
         return;
       }
@@ -50,6 +51,7 @@ export default function ReportForm({ onSubmitted }: ReportFormProps) {
       setSeverity("MEDIUM");
       setAffectedAsset("");
       setMessage("Report submitted successfully.");
+      router.refresh();
       onSubmitted?.();
     } catch {
       setError("Could not reach the server. Please try again.");
@@ -70,8 +72,8 @@ export default function ReportForm({ onSubmitted }: ReportFormProps) {
           name="title"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          minLength={3}
-          maxLength={160}
+          minLength={8}
+          maxLength={200}
           required
           placeholder="e.g. SQL injection in search endpoint"
         />
@@ -82,7 +84,7 @@ export default function ReportForm({ onSubmitted }: ReportFormProps) {
           name="description"
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          minLength={10}
+          minLength={20}
           maxLength={10000}
           required
           rows={5}
@@ -109,7 +111,7 @@ export default function ReportForm({ onSubmitted }: ReportFormProps) {
           name="affectedAsset"
           value={affectedAsset}
           onChange={(event) => setAffectedAsset(event.target.value)}
-          maxLength={500}
+          maxLength={255}
           required
           placeholder="e.g. https://example.com/search"
         />

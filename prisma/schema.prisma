@@ -29,6 +29,12 @@ enum ReportStatus {
   CLOSED
 }
 
+enum PatchReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id                  String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email               String                @unique @db.VarChar(255)
@@ -41,6 +47,8 @@ model User {
   assignedReports     VulnerabilityReport[] @relation("ReportAssignee")
   statusChanges       ReportStatusHistory[]
   recordedPayouts     BountyPayout[]        @relation("PayoutRecorder")
+  submittedPatches    Patch[] @relation("PatchSubmitter")
+  reviewedPatches     Patch[] @relation("PatchReviewer")
   auditEvents         AuditLog[]
 
   @@map("users")
@@ -109,6 +117,13 @@ model Patch {
   reportId    String               @map("report_id") @db.Uuid
   summary     String
   reference   String               @db.VarChar(255)
+  reviewStatus PatchReviewStatus @default(PENDING) @map("review_status")
+  submittedById String? @map("submitted_by_id") @db.Uuid
+  reviewedById String? @map("reviewed_by_id") @db.Uuid
+  reviewedAt DateTime? @map("reviewed_at") @db.Timestamptz(6)
+  reviewNote String? @map("review_note") @db.VarChar(500)
+  submittedBy User? @relation("PatchSubmitter", fields: [submittedById], references: [id], onDelete: Restrict)
+  reviewedBy User? @relation("PatchReviewer", fields: [reviewedById], references: [id], onDelete: Restrict)
   patchedAt   DateTime             @map("patched_at") @db.Timestamptz(6)
   createdAt   DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
   report      VulnerabilityReport  @relation(fields: [reportId], references: [id], onDelete: Cascade)
